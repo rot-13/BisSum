@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+  "name": "BisSum",
+  "version": "0.1",
+
+  "description": "Show how much 10bis money you spent this month",
+
+  "content_scripts": [{
+    "matches": ["https://www.10bis.co.il/Account/UserReport*"],
+    "js": ["jquery-2.1.4.min.js", "main.js"],
+    "run_at": "document_end"
+  }]
+}
