@@ -63,16 +63,19 @@ var until = function (selector, time, callback) {
 };
 
 $(document).ready(function() {
+  var DAILY_ALLOWANCE = 40;
   // wait 5 seconds if we can't get the year from the datepicker
   until('.ui-datepicker-year', 5000, function() {
     var d = bisSum('.userReportDataTbl .reportDataTr');
     var totalDays = workingDays();
+    var monthBudget = totalDays * DAILY_ALLOWANCE;
 
     $(".reportHeaderDiv").prepend(
       '<div style="float:left; width:309px;">' +
         '<div style="float:left; color:#D2232A; font-weight:bold;">' +
           '<p>₪' + d.sum.toFixed(2) + '</p>' +
-          '<p>₪' + totalDays * 40 + '</p>' +
+          '<p>₪' + monthBudget + '</p>' +
+          '<p>₪' + (monthBudget - d.sum).toFixed(2) + '</p>' +
           '<p>' + totalDays + '</p>' +
           '<p>' + d.days + '</p>' +
           '<p>₪' + d.avg.toFixed(2) + '</p>' +
@@ -80,10 +83,11 @@ $(document).ready(function() {
         '<div style="float: right; font-weight: bold;">' +
           '<p>נוצלו החודש בצהריים:</p>' +
           '<p>תקציב חודשי*:</p>' +
+          '<p>תקציב נותר:</p>' +
           '<p>ימי עבודה החודש*:</p>' +
           '<p>ימים עם תשלום:</p>' +
           '<p>תשלום ממוצע ליום שימוש:</p>' +
-          '<p>* ללא התחשבות בחגים וחופשים</p>' +
+          '<p style="font-weight: normal;">* ללא התחשבות בחגים וחופשים</p>' +
         '</div>' +
       '</div>');
   });
