@@ -2,6 +2,7 @@ bisSum = function(selector){
   var sum=0;
   var days=0;
   var lastDate="";
+  var avg = 0;
   $(selector).each(function() {
     var date_from = new Date, date_to = new Date;
     // Lunch is from 6:00 to 16:30
@@ -24,7 +25,10 @@ bisSum = function(selector){
       }
     }
   });
-  return {"sum": sum, "days": days, "avg": sum/days};
+  if (days !== 0) {
+    avg = sum/days;
+  }
+  return {"sum": sum, "days": days, "avg": avg};
 }
 
 workingDays = function(){
@@ -75,7 +79,7 @@ $(document).ready(function() {
         '<div style="float:left; color:#D2232A; font-weight:bold;">' +
           '<p>₪' + d.sum.toFixed(2) + '</p>' +
           '<p>₪' + monthBudget + '</p>' +
-          '<p>₪' + (monthBudget - d.sum).toFixed(2) + '</p>' +
+          '<p style="direction: ltr;">₪' + (monthBudget - d.sum).toFixed(2) + '</p>' +
           '<p>' + totalDays + '</p>' +
           '<p>' + d.days + '</p>' +
           '<p>₪' + d.avg.toFixed(2) + '</p>' +
