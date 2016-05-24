@@ -11,13 +11,14 @@ bisSum = function(selector){
     date_to.setHours(16);
     date_to.setMinutes(30);
     var dat = new Date;
-    var time = $(this).children().eq(2).text().split(/\:|\-/g);
-    var payDate = $(this).children().eq(1).text();
+    var time = $(this).children().eq(3).text().split(/\:|\-/g);
+    var payDate = $(this).children().eq(2).text();
     // console.log(payDate.trim());
     dat.setHours(time[0]);
     dat.setMinutes(time[1]);
+    // console.log("date_from: " + date_from + " date_to: " + date_to + " dat: " + dat);
     if (dat>date_from && dat<date_to) {
-      var curr_price = Number($(this).children().eq(5).text().replace(/[^\d.-]/g,''));
+      var curr_price = Number($(this).children().eq(6).text().replace(/[^\d.-]/g,''));
       sum += curr_price;
       if (payDate != lastDate) {
         days += 1;
