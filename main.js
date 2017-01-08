@@ -34,6 +34,7 @@ bisSum = function(selector){
 
 workingDays = function(){
   var days = 0;
+  var daysSoFar = 0;
   var startEnd = $('.reportGeneralDataFieldValueTd').first().text().trim().split('-');
   var month = parseInt(startEnd[0].split('/')[1]) - 1; // zero based in javascript
   var year = parseInt($('.ui-datepicker-year').val());
@@ -41,13 +42,20 @@ workingDays = function(){
   var end = startEnd[1].split('/')[0];
   var startDate = new Date(year, month, parseInt(start));
   var endDate = new Date(year, month, parseInt(end));
+  var today = new Date(year, month, new Date().getDate());
   while (startDate <= endDate) {
     if(isWorkingDay(startDate)) {
       days += 1;
+
+      // Assume you're looking at this in the morning so don't count today as having passed
+      if (startDate < today) {
+        daysSoFar += 1;
+      }
     }
+
     startDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 1);
   }
-  return days;
+  return { "days": days, "daysSoFar": daysSoFar };
 }
 
 isWorkingDay = function(date) {
@@ -72,18 +80,24 @@ $(document).ready(function() {
   // wait 5 seconds if we can't get the year from the datepicker
   until('.ui-datepicker-year', 5000, function() {
     var d = bisSum('.userReportDataTbl .reportDataTr');
-    var totalDays = workingDays();
+    var days = workingDays();
+    var totalDays = days.days;
+    var workingDaysSoFar = days.daysSoFar;
+    var workingDaysLeft = totalDays - workingDaysSoFar;
     var monthBudget = totalDays * DAILY_ALLOWANCE;
+    var budgetLeft = (monthBudget - d.sum).toFixed(2);
 
     $(".reportHeaderDiv").prepend(
       '<div style="float:left; width:309px;">' +
         '<div style="float:left; color:#D2232A; font-weight:bold;">' +
           '<p>₪' + d.sum.toFixed(2) + '</p>' +
           '<p>₪' + monthBudget + '</p>' +
-          '<p style="direction: ltr;">₪' + (monthBudget - d.sum).toFixed(2) + '</p>' +
+          '<p style="direction: ltr;">₪' + budgetLeft + '</p>' +
           '<p>' + totalDays + '</p>' +
           '<p>' + d.days + '</p>' +
           '<p>₪' + d.avg.toFixed(2) + '</p>' +
+          '<p>' + workingDaysLeft + '</p>' +
+          '<p>₪' + (budgetLeft / workingDaysLeft).toFixed(2) + '</p>' +
         '</div>' +
         '<div style="float: right; font-weight: bold;">' +
           '<p>נוצלו החודש בצהריים:</p>' +
@@ -92,6 +106,8 @@ $(document).ready(function() {
           '<p>ימי עבודה החודש*:</p>' +
           '<p>ימים עם תשלום:</p>' +
           '<p>תשלום ממוצע ליום שימוש:</p>' +
+          '<p>ימי עבודה נותרים*:</p>' +
+          '<p>תקציב יומי נותר:</p>' +
           '<p style="font-weight: normal;">* ללא התחשבות בחגים וחופשים</p>' +
         '</div>' +
       '</div>');
