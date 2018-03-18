@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "BisSum",
-  "version": "0.4",
+  "version": "0.5",
 
   "description": "Show how much 10bis money you spent this month",
 
